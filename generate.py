@@ -1,15 +1,5 @@
 from PIL import Image, ImageSequence
 import time, json, imageio, os
-#import BlynkLib
-
-# Initialize Blynk
-#blynk = BlynkLib.Blynk('gWccqWX-FZoCWHrJ5IOr-q97prFF8L6W', server='blynk.iot-cm.com', port = 8080)
-
-
-global img_array, bvalue
-
-bvalue = 1
-
 
 def initImages():
     with open('image.json') as f:
@@ -18,12 +8,6 @@ def initImages():
 
 
 images = initImages()
-
-"""
-# Register Virtual Pins
-@blynk.VIRTUAL_WRITE(1)
-def my_write_handler(value):
-    bvalue = int(value[0])"""
 
 
 def imgToJson(path):
@@ -86,41 +70,7 @@ def resize_files():
     for file in os.listdir('./images'):
         imgToJson(f'images/{file}')
 
-
-#pixel_board = PixelBoard(board.D18,16,16,0.6)
-"""
-pixel_board = PixelBoard(board.D18,16,16,0.6)
-
 resize_files()
 with open('image.json', 'w') as fout:
     json.dump(images , fout)
 
-"""
-
-
-resize_files()
-with open('image.json', 'w') as fout:
-    json.dump(images , fout)
-
-"""
-try:
-    counter = 0
-    length = len(images)
-    while(True):
-        blynk.run()
-        if(bool(bvalue)):
-            start = time.time()
-            counter += 1
-            while(time.time() - start < (10)):
-                for i in range(len(images[counter%length])):
-                    pixel_board.displayImage(images[counter%length][f'frame {i}'])
-                    time.sleep(0.1)
-        else:
-            pixel_board.clear()
-
-
-except KeyboardInterrupt:
-    pixel_board.clear()
-    time.sleep(0.5)
-    exit()
-"""

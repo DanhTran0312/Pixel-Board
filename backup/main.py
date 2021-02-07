@@ -15,7 +15,7 @@ def initImages():
     return data
 
 images = initImages()
-bvalue = 1
+bvalue = 0
 loop = False
 current_index = 0
 
@@ -23,14 +23,15 @@ current_index = 0
 @blynk.VIRTUAL_WRITE(1)
 def on_off_handler(value):
     global bvalue
-    bvalue = bool(int(value[0]))
+    if(int(value[0]) == 1):
+        bvalue = not bvalue
+    
 
 # SKIP ANIMATION
 @blynk.VIRTUAL_WRITE(2)
 def skip_handler(value):
     global current_index
     if(int(value[0]) == 1):
-        print(value[0])
         current_index += 1
 
 # LOOP
@@ -50,42 +51,37 @@ def display():
             temp_index = current_index
             # loop till time to move on to next image
             while((time.time() - start < (10)) or loop):
-                blynk.run()
-                if(not bvalue):
-                    pixel_board.clear()
-                    break
-                if(current_index != temp_index):
+                if(current_index != temp_index or not bvalue):
                     break
                 for i in range(len(images[current_index%length])):
-                    blynk.run()
-                    if(not bvalue):
-                        pixel_board.clear()
-                        break
-                    if(current_index != temp_index):
+                    if(current_index != temp_index or not bvalue):
                         break
                     pixel_board.displayImage(images[current_index%length][f'frame {i}'])
                     time.sleep(0.1)
-            current_index = (current_index + 1) % length
+            else:
+                current_index = (current_index + 1) % length
         else:
             pixel_board.clear()
-            while(not bvalue):
-                blynk.run()
-                time.sleep(1)
+
 
 pixel_board = PixelBoard(board.D18,16,16,0.6)
 
 
+def getInput():
+    while True:
+        blynk.run()
+
+
 try:
-    """t1 = threading.Thread(target=display)
+    t1 = threading.Thread(target=display)
     t2 = threading.Thread(target=getInput)
 
     t1.start()
     t2.start()
 
     t1.join()
-    t2.join()"""
-    while True:
-        display()
+    t2.join()
+
 
 except KeyboardInterrupt:
     pixel_board.clear()
