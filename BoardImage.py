@@ -9,7 +9,6 @@ class BoardImage():
         self.path = path
         self.name = temp[0]
         self.format = temp[1]
-        self.value =
 
 
     def saveImage(self, img):

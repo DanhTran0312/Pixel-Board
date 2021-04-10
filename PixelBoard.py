@@ -66,7 +66,6 @@ class PixelBoard():
 
     def cyloneCol(self, col,  n, color, delay):
         self.clear()
-        current_index = n
         for i in range(n,self.height):
             for j in range(n):
                 self.setColor((i-j,col), color)
@@ -85,7 +84,6 @@ class PixelBoard():
 
     def cyloneRow(self, row,  n, color, delay):
         self.clear()
-        current_index = n
         for i in range(n,self.width):
             for j in range(n):
                 self.setColor((row,i-j), color)
