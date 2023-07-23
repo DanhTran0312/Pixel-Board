@@ -1,13 +1,8 @@
 from PIL import Image, ImageSequence
-import time, json, imageio, os
-
-def initImages():
-    with open('image.json') as f:
-        data = json.load(f)
-    return data
-
-
-images = initImages()
+import time
+import json
+import imageio
+import os
 
 
 def imgToJson(path, image_list):
@@ -42,7 +37,7 @@ def imgToJson(path, image_list):
 
 
 def resize_img(path):
-    size = 16,16
+    size = 16, 16
 
     # Open source
     im = Image.open(path)
@@ -60,17 +55,8 @@ def resize_img(path):
     frames = thumbnails(frames)
 
     # Save output
-    om = next(frames) # Handle first frame separately
-    om.info = im.info # Copy sequence info
+    om = next(frames)  # Handle first frame separately
+    om.info = im.info  # Copy sequence info
     om.save(path, save_all=True, append_images=list(frames))
 
-
-
-def resize_files():
-    for file in os.listdir('./images'):
-        imgToJson(f'images/{file}', images)
-
-resize_files()
-with open('image.json', 'w') as fout:
-    json.dump(images , fout)
-
+    
